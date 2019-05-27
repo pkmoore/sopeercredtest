@@ -3,6 +3,7 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 
 int main() {
   int sockfd;
@@ -26,21 +27,35 @@ int main() {
     perror("Accept failed");
   }
 
-  char buf[256];
-  size_t result;
-  do {
-  if(-1 == (result = recv(clientfd, &buf, sizeof(buf - 1), 0))) {
-    perror("Recv encountered an error");
-    break;
-  }
-  if(0 != result) {
-    buf[result + 1] = '\0';
-    printf("%s\n", buf);
-  } else {
-    printf("Client cleanly closed socket\n");
-  }
-  } while(0 != result);
+  printf("Client connected\n");
+  printf("Forking in 10 seconds\n");
+  sleep(10);
 
-  close(sockfd);
-  unlink("/tmp/testsocket");
+  pid_t pid;
+  printf("Forking for the first time\n");
+  if(-1 == (pid = fork())) {
+    perror("First fork failed");
+  }
+  if(0 == pid) {
+    printf("We have forked the first time.  Advance the client...\n");
+    printf("Forking again in 10 seconds\n");
+    sleep(10);
+    if(-1 == (pid = fork())) {
+      perror("Second fork failed");
+    }
+    if(0 == pid) {
+      printf("We have forked the second time.  Advance the client...\n");
+      printf("Exiting in 10 seconds\n");
+      sleep(10);
+      close(sockfd);
+      unlink("/tmp/testsocket");
+    } else {
+      printf("Second fork generated child process pid: %d\n", pid);
+      exit(0);
+    }
+  } else {
+    printf("First fork generated child process pid: %d\n", pid);
+    exit(0);
+  }
+
 }
