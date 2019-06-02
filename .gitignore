@@ -1,2 +1,4 @@
 server_givespeercred
 client_requestspeercred
+server_requestspeercred
+client_givespeercred
