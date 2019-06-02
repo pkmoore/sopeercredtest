@@ -1,2 +1,2 @@
-server
-client
+server_givespeercred
+client_requestspeercred

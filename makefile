@@ -1,11 +1,11 @@
-all: server client
+all: server_givespeercred client_requestspeercred
 
-server: server.c
-	gcc -std=c11 -o server server.c
+server_givespeercred: server_givespeercred.c
+	gcc -std=c11 -o server_givespeercred server_givespeercred.c
 
-client: client.c
-	gcc -std=c11 -o client client.c
+client_requestspeercred: client_requestspeercred.c
+	gcc -std=c11 -o client_requestspeercred client_requestspeercred.c
 
 clean:
-	- rm server
-	- rm client
+	- rm server_givespeercred
+	- rm client_requestspeercred
