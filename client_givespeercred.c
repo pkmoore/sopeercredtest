@@ -15,21 +15,20 @@ int main() {
   addr.sun_family = AF_UNIX;
   strcpy(addr.sun_path, "/tmp/testsocket");
 
-  if(-1 == connect(sockfd, (struct sockaddr*)&addr, sizeof(addr))) {
-    perror("connect failed");
-  }
-
-
-  printf("Connected to server \n");
-  printf("Forking in 10 seconds\n");
-  sleep(10);
-
   pid_t pid;
+  pid = getpid();
+  printf("Process id before fork() and connect(): %d\n", pid);
+  printf("Forking and connecting in 10 seconds\n");
+  fflush(stdout);
+  sleep(10);
   printf("Forking for the first time\n");
   if(-1 == (pid = fork())) {
     perror("First fork failed");
   }
   if(0 == pid) {
+    if(-1 == connect(sockfd, (struct sockaddr*)&addr, sizeof(addr))) {
+      perror("connect failed");
+    }
     printf("We have forked the first time.  Advance the client...\n");
     printf("Forking again in 10 seconds\n");
     sleep(10);
@@ -47,8 +46,7 @@ int main() {
       exit(0);
     }
   } else {
-    printf("First fork generated child process pid: %d\n", pid);
+    printf("Forking before connect() generated child process pid: %d\n", pid);
     exit(0);
   }
-
 }

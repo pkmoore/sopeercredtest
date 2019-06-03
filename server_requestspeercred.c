@@ -39,12 +39,12 @@ int main() {
                                    &opt_length))) {
     perror("getsockopt failed");
   }
-  printf("Peer credentials before first fork:\n");
+  printf("Peer credentials after connect() (client has forked):\n");
   printf("pid: %d\n", peercredbuf.pid);
   printf("uid: %d\n", peercredbuf.uid);
   printf("gid: %d\n", peercredbuf.gid);
 
-  printf("Press enter after server has forked for the first time");
+  printf("Press enter after server has forked for the second time");
   getchar();
 
   opt_length = sizeof(peercredbuf);
@@ -56,24 +56,7 @@ int main() {
     perror("getsockopt failed");
   }
 
-  printf("Peer credentials after first fork:\n");
-  printf("pid: %d\n", peercredbuf.pid);
-  printf("uid: %d\n", peercredbuf.uid);
-  printf("gid: %d\n", peercredbuf.gid);
-
-  printf("Press enter after server has forked for the __SECOND__ time");
-  getchar();
-
-  opt_length = sizeof(peercredbuf);
-  if(-1 == (gso_result = getsockopt(clientfd,
-                                   SOL_SOCKET,
-                                   SO_PEERCRED,
-                                   (void*)&peercredbuf,
-                                   &opt_length))) {
-    perror("getsockopt failed");
-  }
-
-  printf("Peer credentials before after second fork:\n");
+  printf("Peer credentials after second fork:\n");
   printf("pid: %d\n", peercredbuf.pid);
   printf("uid: %d\n", peercredbuf.uid);
   printf("gid: %d\n", peercredbuf.gid);
