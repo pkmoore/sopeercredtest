@@ -29,7 +29,7 @@ int main() {
     if(-1 == connect(sockfd, (struct sockaddr*)&addr, sizeof(addr))) {
       perror("connect failed");
     }
-    printf("We have forked the first time.  Advance the client...\n");
+    printf("We have forked and connected.\n");
     printf("Forking again in 10 seconds\n");
     sleep(10);
     if(-1 == (pid = fork())) {
